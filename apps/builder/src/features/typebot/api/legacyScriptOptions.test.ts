@@ -59,6 +59,16 @@ mock.module("@typebot.io/telemetry/trackEvents", () => ({
 mock.module("@typebot.io/lib/s3/copyObjects", () => ({
   copyObjects: async () => {},
 }));
+mock.module("@typebot.io/lib/s3/replaceTypebotUploadUrlsWithNewIds", () => ({
+  replaceTypebotUploadUrlsWithNewIds: async ({
+    typebot,
+  }: {
+    typebot: unknown;
+  }) => ({
+    typebot,
+    filesToCopy: [],
+  }),
+}));
 
 const { handleCreateTypebot, createTypebotInputSchema } = await import(
   "./handleCreateTypebot"
