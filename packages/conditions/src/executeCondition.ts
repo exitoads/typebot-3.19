@@ -32,9 +32,14 @@ const executeComparison = (
     variables,
   }: { sessionStore: SessionStore; variables: Variable[] },
 ): boolean => {
-  if (!comparison?.variableId) return false;
-  const inputValue =
-    variables.find((v) => v.id === comparison.variableId)?.value ?? null;
+  if (!comparison?.variableId) {
+    console.log(
+      "[CONDITIONS DEBUG] executeComparison: variableId vazio -> false",
+    );
+    return false;
+  }
+  const variable = variables.find((v) => v.id === comparison.variableId);
+  const inputValue = variable?.value ?? null;
   const value =
     comparison.value === "undefined" || comparison.value === "null"
       ? null
@@ -43,7 +48,35 @@ const executeComparison = (
           variables,
           sessionStore,
         }));
-  if (isNotDefined(comparison.comparisonOperator)) return false;
+
+  console.log(
+    "[CONDITIONS DEBUG] executeComparison - DETALHES DA COMPARAÇÃO:",
+    JSON.stringify({
+      comparisonId: comparison.id,
+      variableId: comparison.variableId,
+      variableName:
+        variable?.name ??
+        "VARIÁVEL NÃO ENCONTRADA (🚨 PROBLEMA MUITO PROVÁVEL)",
+      variableValueType: typeof inputValue,
+      inputValue,
+      inputValueBytes:
+        typeof inputValue === "string"
+          ? Array.from(inputValue).map((c) =>
+              c.charCodeAt(0).toString(16).padStart(4, "0"),
+            )
+          : null,
+      comparisonOperator: comparison.comparisonOperator,
+      comparisonValue: value,
+      comparisonValueRaw: comparison.value,
+    }),
+  );
+
+  if (isNotDefined(comparison.comparisonOperator)) {
+    console.log(
+      "[CONDITIONS DEBUG] executeComparison: comparisonOperator não definido -> false",
+    );
+    return false;
+  }
   switch (comparison.comparisonOperator) {
     case ComparisonOperators.CONTAINS: {
       if (Array.isArray(inputValue)) {
@@ -187,13 +220,43 @@ const executeComparison = (
     }
     case ComparisonOperators.MATCHES_REGEX: {
       const matchesRegex = (a: string | null, b: string | null) => {
-        if (b === "" || !b || !a) return false;
+        if (b === "" || !b || !a) {
+          console.log(
+            "[CONDITIONS DEBUG] MATCHES_REGEX: valores vazios -> false",
+            { a, b },
+          );
+          return false;
+        }
         const regex = preprocessRegex(b);
-        if (!regex.pattern) return false;
+        if (!regex.pattern) {
+          console.log(
+            "[CONDITIONS DEBUG] MATCHES_REGEX: pattern vazio após preprocess -> false",
+            { rawRegex: b, parsed: regex },
+          );
+          return false;
+        }
         try {
-          return new RegExp(regex.pattern, regex.flags).test(a);
-        } catch {
-          // Most likelInvalid regex, treat as non-match
+          const result = new RegExp(regex.pattern, regex.flags).test(a);
+          console.log(
+            "[CONDITIONS DEBUG] MATCHES_REGEX - detalhes:",
+            JSON.stringify({
+              input: a,
+              inputBytes: Array.from(a).map((c) =>
+                c.charCodeAt(0).toString(16).padStart(4, "0"),
+              ),
+              rawRegex: b,
+              pattern: regex.pattern,
+              flags: regex.flags,
+              compiledRegex: new RegExp(regex.pattern, regex.flags).toString(),
+              result,
+            }),
+          );
+          return result;
+        } catch (error) {
+          console.log(
+            "[CONDITIONS DEBUG] MATCHES_REGEX: ERRO na compilação da regex -> false",
+            { rawRegex: b, parsed: regex, error: String(error) },
+          );
           return false;
         }
       };

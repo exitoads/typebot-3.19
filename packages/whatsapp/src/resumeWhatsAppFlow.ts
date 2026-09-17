@@ -67,6 +67,34 @@ export const resumeWhatsAppFlow = async ({
       timestamps: receivedMessages.map((message) => message.timestamp),
     });
 
+  console.log(
+    "[WHATSAPP DEBUG] resumeWhatsAppFlow INICIO:",
+    JSON.stringify({
+      sessionId,
+      workspaceId,
+      credentialsId,
+      phoneNumberId,
+      receivedMessagesCount: receivedMessages.length,
+      firstMessage: receivedMessages[0]
+        ? {
+            type: receivedMessages[0].type,
+            from: receivedMessages[0].from,
+            text:
+              receivedMessages[0].type === "text"
+                ? receivedMessages[0].text?.body
+                : undefined,
+            bytes:
+              receivedMessages[0].type === "text"
+                ? Array.from(receivedMessages[0].text?.body ?? "").map((c) =>
+                    c.charCodeAt(0).toString(16).padStart(4, "0"),
+                  )
+                : undefined,
+          }
+        : null,
+      contactName: contact?.name ?? null,
+    }),
+  );
+
   const isPreview = workspaceId === undefined || credentialsId === undefined;
 
   const credentials =
@@ -90,12 +118,24 @@ export const resumeWhatsAppFlow = async ({
 
   let session = await getSession(sessionId);
 
+  console.log(
+    "[WHATSAPP DEBUG] Sessão encontrada no banco:",
+    JSON.stringify({
+      sessionExists: !!session,
+      hasState: !!session?.state,
+      updatedAt: session?.updatedAt.toISOString() ?? null,
+      isReplying: session?.isReplying ?? null,
+      expiryTimeoutMs: session?.state?.expiryTimeout ?? null,
+      typebotInQueue: session?.state?.typebotsQueue?.[0]?.typebot?.id ?? null,
+    }),
+  );
+
   if (session && !session.state) {
     if (
       session.updatedAt.getTime() + RESET_EMPTY_SESSION_AFTER_MS <
       Date.now()
     ) {
-      console.warn("Old empty session, resetting...");
+      console.warn("[WHATSAPP DEBUG] Old empty session, resetting...");
       session = null;
     } else {
       throw new WhatsAppError(
@@ -117,6 +157,16 @@ export const resumeWhatsAppFlow = async ({
     isDefined(session?.state) &&
     isDefined(session.state.expiryTimeout) &&
     session?.updatedAt.getTime() + session.state.expiryTimeout < Date.now();
+
+  console.log(
+    "[WHATSAPP DEBUG] Decisão de fluxo:",
+    JSON.stringify({
+      isSessionExpired,
+      willStartNewSession: !session?.state || isSessionExpired,
+      willContinueExistingFlow: !!session?.state && !isSessionExpired,
+      note: "🚨 SE willContinueExistingFlow = true => startWhatsAppSession NÃO É CHAMADO e as start conditions NÃO são avaliadas!",
+    }),
+  );
 
   if (!isSessionExpired && session?.isReplying && callFrom !== "webhook")
     throw new WhatsAppError("Is in reply state");

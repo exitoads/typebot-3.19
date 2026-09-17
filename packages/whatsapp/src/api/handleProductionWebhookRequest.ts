@@ -73,10 +73,30 @@ export const handleProductionWebhookRequest = async ({
 
   if (!entry) return WEBHOOK_SUCCESS_MESSAGE;
 
+  console.log(
+    "[WHATSAPP DEBUG] Webhook recebido (handleProductionWebhookRequest):",
+    JSON.stringify({
+      workspaceId,
+      credentialsId,
+      entryCount: entry?.length ?? 0,
+      entryPreview: entry?.map?.((e: any) => ({
+        id: e.id,
+        changesCount: e.changes?.length ?? 0,
+        messages: e.changes
+          ?.flatMap?.((c: any) => c.value?.messages ?? [])
+          ?.map?.((m: any) => ({
+            from: m.from,
+            type: m.type,
+            text: m.text?.body,
+          })),
+      })),
+    }),
+  );
+
   const errors = extractErrorsFromEntry(entry);
 
   if (errors.length > 0) {
-    console.warn("Incoming WhatsApp errors", errors);
+    console.warn("[WHATSAPP DEBUG] Incoming WhatsApp errors", errors);
   }
 
   const incomingMessagesDetails = groupIncomingWebhookEntriesPerUser(entry);

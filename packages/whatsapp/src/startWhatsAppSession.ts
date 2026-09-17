@@ -4,15 +4,12 @@ import type {
   Message,
 } from "@typebot.io/chat-api/schemas";
 import type { SessionState } from "@typebot.io/chat-session/schemas";
-import {
-  ComparisonOperators,
-  LogicalOperator,
-} from "@typebot.io/conditions/constants";
+import { executeCondition } from "@typebot.io/conditions/executeCondition";
 import type { WhatsAppCredentials } from "@typebot.io/credentials/schemas";
 import { isNotDefined } from "@typebot.io/lib/utils";
 import prisma from "@typebot.io/prisma";
 import type { Prisma } from "@typebot.io/prisma/types";
-import type { SessionStore } from "@typebot.io/runtime-session-store";
+import { SessionStore } from "@typebot.io/runtime-session-store";
 import { defaultSessionExpiryTimeout } from "@typebot.io/settings/constants";
 import type { Settings } from "@typebot.io/settings/schemas";
 import type { PublicTypebot } from "@typebot.io/typebot/schemas/publicTypebot";
@@ -67,21 +64,69 @@ export const startWhatsAppSession = async ({
       publicTypebot.settings.whatsApp?.isEnabled,
   );
 
-  const publicTypebotWithMatchedCondition = botsWithWhatsAppEnabled.find(
-    (publicTypebot) =>
-      (publicTypebot.settings.whatsApp?.startCondition?.comparisons.length ??
-        0) > 0 &&
-      messageMatchStartCondition(
-        incomingMessage ?? { type: "text", text: "" },
-        publicTypebot.settings.whatsApp?.startCondition,
+  const incomingMessageText =
+    incomingMessage?.type === "text" ? incomingMessage.text : "";
+  console.log(
+    "[WHATSAPP DEBUG] startWhatsAppSession - incomingMessage:",
+    JSON.stringify({
+      type: incomingMessage?.type ?? "none",
+      text: incomingMessageText,
+      textBytes: Array.from(incomingMessageText).map((c) =>
+        c.charCodeAt(0).toString(16).padStart(4, "0"),
       ),
+    }),
+  );
+  console.log(
+    "[WHATSAPP DEBUG] bots with WhatsApp enabled (total):",
+    botsWithWhatsAppEnabled.length,
   );
 
-  const publicTypebot =
-    publicTypebotWithMatchedCondition ??
-    botsWithWhatsAppEnabled.find(
-      (publicTypebot) => !publicTypebot.settings.whatsApp?.startCondition,
-    );
+  let matchedBotIndex = -1;
+  const publicTypebotWithMatchedCondition = botsWithWhatsAppEnabled.find(
+    (publicTypebot, index) => {
+      const hasCondition =
+        (publicTypebot.settings.whatsApp?.startCondition?.comparisons.length ??
+          0) > 0;
+      if (!hasCondition) {
+        console.log(
+          `[WHATSAPP DEBUG] bot[${index}] publicId=${publicTypebot.typebot.publicId} - sem startCondition, pulando`,
+        );
+        return false;
+      }
+      const startCondition = publicTypebot.settings.whatsApp?.startCondition;
+      const matchResult = messageMatchStartCondition(
+        incomingMessage ?? { type: "text", text: "" },
+        startCondition,
+      );
+      console.log(
+        `[WHATSAPP DEBUG] bot[${index}] publicId=${publicTypebot.typebot.publicId} - logicalOperator=${startCondition?.logicalOperator ?? "AND (default)"} comparisons=${JSON.stringify(startCondition?.comparisons)} matchResult=${matchResult}`,
+      );
+      if (matchResult) matchedBotIndex = index;
+      return matchResult;
+    },
+  );
+
+  const fallbackBot = botsWithWhatsAppEnabled.find(
+    (publicTypebot) => !publicTypebot.settings.whatsApp?.startCondition,
+  );
+
+  console.log(
+    "[WHATSAPP DEBUG] RESULTADO FINAL:",
+    JSON.stringify({
+      matchedBotWithCondition: publicTypebotWithMatchedCondition
+        ? {
+            publicId: publicTypebotWithMatchedCondition.typebot.publicId,
+            index: matchedBotIndex,
+          }
+        : null,
+      fallbackBotWithoutCondition: fallbackBot?.typebot.publicId ?? null,
+      selectedBot:
+        (publicTypebotWithMatchedCondition ?? fallbackBot)?.typebot.publicId ??
+        null,
+    }),
+  );
+
+  const publicTypebot = publicTypebotWithMatchedCondition ?? fallbackBot;
 
   if (isNotDefined(publicTypebot)) {
     if (botsWithWhatsAppEnabled.length > 0)
@@ -121,78 +166,67 @@ export const startWhatsAppSession = async ({
   });
 };
 
+const whatsAppIncomingMessageVariableId = "whatsapp-incoming-message";
+
 export const messageMatchStartCondition = (
   message: Message | undefined,
   startCondition: NonNullable<Settings["whatsApp"]>["startCondition"],
+  sessionStore: SessionStore = new SessionStore(),
 ) => {
-  if (!startCondition) return true;
-  if (message?.type !== "text" || !message.text) return false;
-  return (startCondition.logicalOperator ?? LogicalOperator.AND) ===
-    LogicalOperator.AND
-    ? startCondition.comparisons.every((comparison) =>
-        matchComparison(
-          message.text,
-          comparison.comparisonOperator,
-          comparison.value,
-        ),
-      )
-    : startCondition.comparisons.some((comparison) =>
-        matchComparison(
-          message.text,
-          comparison.comparisonOperator,
-          comparison.value,
-        ),
-      );
-};
-
-const matchComparison = (
-  inputValue: string,
-  comparisonOperator?: ComparisonOperators,
-  value?: string,
-): boolean | undefined => {
-  if (!comparisonOperator) return false;
-  switch (comparisonOperator) {
-    case ComparisonOperators.CONTAINS: {
-      if (!value) return false;
-      return inputValue
-        .trim()
-        .toLowerCase()
-        .includes(value.trim().toLowerCase());
-    }
-    case ComparisonOperators.EQUAL: {
-      return inputValue === value;
-    }
-    case ComparisonOperators.NOT_EQUAL: {
-      return inputValue !== value;
-    }
-    case ComparisonOperators.GREATER: {
-      if (!value) return false;
-      return Number.parseFloat(inputValue) > Number.parseFloat(value);
-    }
-    case ComparisonOperators.LESS: {
-      if (!value) return false;
-      return Number.parseFloat(inputValue) < Number.parseFloat(value);
-    }
-    case ComparisonOperators.IS_SET: {
-      return inputValue.length > 0;
-    }
-    case ComparisonOperators.IS_EMPTY: {
-      return inputValue.length === 0;
-    }
-    case ComparisonOperators.STARTS_WITH: {
-      if (!value) return false;
-      return inputValue.toLowerCase().startsWith(value.toLowerCase());
-    }
-    case ComparisonOperators.ENDS_WITH: {
-      if (!value) return false;
-      return inputValue.toLowerCase().endsWith(value.toLowerCase());
-    }
-    case ComparisonOperators.NOT_CONTAINS: {
-      if (!value) return false;
-      return !inputValue
-        .trim()
-        .toLowerCase()
-        .includes(value.trim().toLowerCase());
-    }
+  if (!startCondition) {
+    console.log(
+      "[WHATSAPP DEBUG] messageMatchStartCondition: startCondition é null/undefined -> true",
+    );
+    return true;
   }
+  if (message?.type !== "text" || !message.text) {
+    console.log(
+      "[WHATSAPP DEBUG] messageMatchStartCondition: mensagem NÃO é texto -> false",
+    );
+    return false;
+  }
+  if (startCondition.comparisons.length === 0) {
+    console.log(
+      "[WHATSAPP DEBUG] messageMatchStartCondition: 0 comparações -> false",
+    );
+    return false;
+  }
+
+  console.log(
+    "[WHATSAPP DEBUG] messageMatchStartCondition - executando executeCondition:",
+    JSON.stringify({
+      messageText: message.text,
+      messageBytes: Array.from(message.text).map((c) =>
+        c.charCodeAt(0).toString(16).padStart(4, "0"),
+      ),
+      logicalOperator: startCondition.logicalOperator ?? "AND (default)",
+      comparisons: startCondition.comparisons,
+    }),
+  );
+
+  const result = executeCondition(
+    {
+      logicalOperator: startCondition.logicalOperator,
+      comparisons: startCondition.comparisons.map((comparison) => ({
+        ...comparison,
+        variableId: whatsAppIncomingMessageVariableId,
+      })),
+    },
+    {
+      variables: [
+        {
+          id: whatsAppIncomingMessageVariableId,
+          name: "WhatsApp message",
+          value: message.text,
+        },
+      ],
+      sessionStore,
+    },
+  );
+
+  console.log(
+    "[WHATSAPP DEBUG] messageMatchStartCondition - RESULTADO executeCondition:",
+    result,
+  );
+  return result;
 };

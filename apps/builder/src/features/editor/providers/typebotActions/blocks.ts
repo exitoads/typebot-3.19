@@ -75,7 +75,17 @@ export const blocksAction = (setTypebot: SetTypebot): BlocksActions => ({
             typebot,
             edgeId: block.outgoingEdgeId,
           });
-        typebot.groups[groupIndex].blocks.splice(blockIndex + 1, 0, newBlock);
+        // TypeScript/Immer's WritableDraft mapped type struggles to
+        // structurally match BlockV6 against this 58+ member discriminated
+        // union once a variant's content shape gets large enough (confirmed:
+        // the same code typechecks fine with a smaller content schema).
+        // Casting the array itself to the plain (non-Draft) element type
+        // sidesteps splice()'s union inference from the draft array type.
+        (typebot.groups[groupIndex].blocks as BlockV6[]).splice(
+          blockIndex + 1,
+          0,
+          newBlock,
+        );
         if (newEdges) {
           newEdges.forEach((edge) => {
             typebot.edges.push(edge);
@@ -132,7 +142,12 @@ const createNewBlock = (
   { groupIndex, blockIndex }: BlockIndices,
 ) => {
   const newBlock = parseNewBlock(type);
-  typebot.groups[groupIndex].blocks.splice(blockIndex ?? 0, 0, newBlock);
+  // See the comment on the first splice() call in this file.
+  (typebot.groups[groupIndex].blocks as BlockV6[]).splice(
+    blockIndex ?? 0,
+    0,
+    newBlock,
+  );
   return newBlock.id;
 };
 
@@ -161,7 +176,12 @@ const moveBlockToGroup = (
       edge.to.groupId = groupId;
     }
   });
-  typebot.groups[groupIndex].blocks.splice(blockIndex ?? 0, 0, newBlock);
+  // See the comment on the first splice() call in this file.
+  (typebot.groups[groupIndex].blocks as BlockV6[]).splice(
+    blockIndex ?? 0,
+    0,
+    newBlock,
+  );
   return newBlock.id;
 };
 

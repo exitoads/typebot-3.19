@@ -622,21 +622,52 @@ const extractVariableIdsUsedForTranscript = (
           variableIds.add(variableId);
         });
       }
-      if (
+      // TS's negative narrowing across this ~25-member union appears to
+      // mis-derive the remaining type once VIDEO_WITH_CAPTION is added
+      // alongside the other media types, incorrectly flagging the direct
+      // comparison as "no overlap" (confirmed: the same code typechecks
+      // fine without this member). Comparing block.type as a plain string
+      // sidesteps the (false) literal-type check; the block itself is then
+      // read through a minimal structural cast since narrowing no longer
+      // applies once one branch of the || chain isn't a literal comparison.
+      const isMediaWithUrlBlock =
         block.type === BubbleBlockType.IMAGE ||
+        block.type === BubbleBlockType.IMAGE_WITH_CAPTION ||
         block.type === BubbleBlockType.VIDEO ||
-        block.type === BubbleBlockType.AUDIO
-      ) {
-        if (!block.content?.url) return;
-        const variablesInfo = getVariablesToParseInfoInText(block.content.url, {
-          ...parseVarParams,
-          sessionStore,
-        });
-        variablesInfo.forEach((variableInfo) => {
-          variableInfo.variableId
-            ? variableIds.add(variableInfo.variableId ?? "")
-            : undefined;
-        });
+        (block.type as string) === BubbleBlockType.VIDEO_WITH_CAPTION ||
+        (block.type as string) === BubbleBlockType.FILE ||
+        block.type === BubbleBlockType.AUDIO;
+      if (isMediaWithUrlBlock) {
+        const mediaBlock = block as { content?: { url?: string } };
+        if (mediaBlock.content?.url) {
+          const variablesInfo = getVariablesToParseInfoInText(
+            mediaBlock.content.url,
+            { ...parseVarParams, sessionStore },
+          );
+          variablesInfo.forEach((variableInfo) => {
+            variableInfo.variableId
+              ? variableIds.add(variableInfo.variableId ?? "")
+              : undefined;
+          });
+        }
+      }
+      const isCaptionedMediaBlock =
+        block.type === BubbleBlockType.IMAGE_WITH_CAPTION ||
+        (block.type as string) === BubbleBlockType.VIDEO_WITH_CAPTION ||
+        (block.type as string) === BubbleBlockType.FILE;
+      if (isCaptionedMediaBlock) {
+        const captionedBlock = block as { content?: { caption?: string } };
+        if (captionedBlock.content?.caption) {
+          const variablesInfo = getVariablesToParseInfoInText(
+            captionedBlock.content.caption,
+            { ...parseVarParams, sessionStore },
+          );
+          variablesInfo.forEach((variableInfo) => {
+            variableInfo.variableId
+              ? variableIds.add(variableInfo.variableId ?? "")
+              : undefined;
+          });
+        }
       }
       if (block.type === LogicBlockType.CONDITION) {
         block.items.forEach((item) => {

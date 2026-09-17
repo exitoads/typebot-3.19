@@ -124,7 +124,10 @@ export const parseVariablesInRichText = (
       element.children[0] &&
       "text" in element.children[0] &&
       isSingleVariable(element.children[0].text as string) &&
-      element.type !== "a";
+      element.type !== "a" &&
+      !element.children[0].bold &&
+      !element.children[0].italic &&
+      !element.children[0].underline;
 
     // Bypass the current element
     if (isStandaloneVariable) {

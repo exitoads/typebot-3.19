@@ -66,6 +66,7 @@ type TranscriptMessage = {
   | { type: "image"; image: string }
   | { type: "video"; video: string }
   | { type: "audio"; audio: string }
+  | { type: "file"; file: string }
 );
 
 export const parseTranscriptMessageText = (
@@ -80,6 +81,8 @@ export const parseTranscriptMessageText = (
       return message.video;
     case "audio":
       return message.audio;
+    case "file":
+      return message.file;
   }
 };
 
@@ -566,6 +569,15 @@ const convertChatMessageToTranscriptMessage = (
         image: chatMessage.content.url,
       };
     }
+    case BubbleBlockType.IMAGE_WITH_CAPTION: {
+      if (!chatMessage.content.url) return null;
+      return {
+        id: chatMessage.id,
+        role: "bot",
+        type: "image",
+        image: chatMessage.content.url,
+      };
+    }
     case BubbleBlockType.VIDEO: {
       if (!chatMessage.content.url) return null;
       return {
@@ -573,6 +585,24 @@ const convertChatMessageToTranscriptMessage = (
         role: "bot",
         type: "video",
         video: chatMessage.content.url,
+      };
+    }
+    case BubbleBlockType.VIDEO_WITH_CAPTION: {
+      if (!chatMessage.content.url) return null;
+      return {
+        id: chatMessage.id,
+        role: "bot",
+        type: "video",
+        video: chatMessage.content.url,
+      };
+    }
+    case BubbleBlockType.FILE: {
+      if (!chatMessage.content.url) return null;
+      return {
+        id: chatMessage.id,
+        role: "bot",
+        type: "file",
+        file: chatMessage.content.url,
       };
     }
     case BubbleBlockType.AUDIO: {

@@ -73,7 +73,9 @@ export const parseBubbleBlock = (
               }
             : {
                 type: "markdown",
-                markdown: convertRichTextToMarkdown(richText),
+                markdown: convertRichTextToMarkdown(richText, {
+                  flavour: "whatsapp",
+                }),
               },
       };
     }
@@ -83,7 +85,8 @@ export const parseBubbleBlock = (
         variables,
         sessionStore,
       });
-    case BubbleBlockType.VIDEO: {
+    case BubbleBlockType.VIDEO:
+    case BubbleBlockType.VIDEO_WITH_CAPTION: {
       const parsedContent = block.content
         ? deepParseVariables(block.content, {
             variables,

@@ -163,7 +163,10 @@ const groupsActions = (setTypebot: SetTypebot): GroupsActions => ({
                     group.graphCoordinates.y -
                     newCoordinates.farLeftElement.y,
                 },
-          blocks: newBlocks,
+          // Same TS/Immer big-union limitation as the splice() calls in
+          // blocks.ts: BlockV6[] stops structurally matching GroupV6["blocks"]
+          // once a bubble variant's content shape gets large enough.
+          blocks: newBlocks as GroupV6["blocks"],
         };
       });
       const edgesToCreate = newEdgesWithOldIds

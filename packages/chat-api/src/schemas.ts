@@ -1,8 +1,11 @@
 import { audioBubbleContentSchema } from "@typebot.io/blocks-bubbles/audio/schema";
 import { BubbleBlockType } from "@typebot.io/blocks-bubbles/constants";
 import { embedBubbleContentSchema } from "@typebot.io/blocks-bubbles/embed/schema";
+import { fileBubbleContentSchema } from "@typebot.io/blocks-bubbles/file/schema";
 import { imageBubbleContentSchema } from "@typebot.io/blocks-bubbles/image/schema";
+import { imageWithCaptionBubbleContentSchema } from "@typebot.io/blocks-bubbles/imageWithCaption/schema";
 import { videoBubbleContentSchema } from "@typebot.io/blocks-bubbles/video/schema";
+import { videoWithCaptionBubbleContentSchema } from "@typebot.io/blocks-bubbles/videoWithCaption/schema";
 import { cardsBlockSchema } from "@typebot.io/blocks-inputs/cards/schema";
 import { buttonsInputSchemas } from "@typebot.io/blocks-inputs/choice/schema";
 import { dateInputSchema } from "@typebot.io/blocks-inputs/date/schema";
@@ -89,9 +92,24 @@ const imageBubbleSchema = z.object({
   content: imageBubbleContentSchema,
 });
 
+const imageWithCaptionBubbleSchema = z.object({
+  type: z.enum([BubbleBlockType.IMAGE_WITH_CAPTION]),
+  content: imageWithCaptionBubbleContentSchema,
+});
+
 const videoBubbleSchema = z.object({
   type: z.enum([BubbleBlockType.VIDEO]),
   content: videoBubbleContentSchema,
+});
+
+const videoWithCaptionBubbleSchema = z.object({
+  type: z.enum([BubbleBlockType.VIDEO_WITH_CAPTION]),
+  content: videoWithCaptionBubbleContentSchema,
+});
+
+const fileBubbleSchema = z.object({
+  type: z.enum([BubbleBlockType.FILE]),
+  content: fileBubbleContentSchema,
 });
 
 const audioBubbleSchema = z.object({
@@ -129,7 +147,10 @@ export const chatBubbleSchema = z
     z.discriminatedUnion("type", [
       textBubbleSchema,
       imageBubbleSchema,
+      imageWithCaptionBubbleSchema,
       videoBubbleSchema,
+      videoWithCaptionBubbleSchema,
+      fileBubbleSchema,
       audioBubbleSchema,
       embedBubbleSchema,
       customBubbleSchema,
