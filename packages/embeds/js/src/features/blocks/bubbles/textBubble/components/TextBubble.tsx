@@ -71,7 +71,7 @@ export const TextBubble = (props: Props) => {
           </div>
           <div
             class={cx(
-              "overflow-hidden text-fade-in mx-4 my-2 whitespace-pre-wrap slate-html-container relative text-ellipsis",
+              "overflow-hidden text-fade-in mx-4 my-2 whitespace-pre-wrap slate-html-container relative text-ellipsis break-words",
               isTyping() ? "opacity-0 h-4 @xs:h-5" : "opacity-100 h-full",
             )}
           >

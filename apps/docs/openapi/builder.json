@@ -261,7 +261,16 @@
                             "$ref": "#/components/schemas/Image"
                           },
                           {
+                            "$ref": "#/components/schemas/ImageWithCaption"
+                          },
+                          {
                             "$ref": "#/components/schemas/Video"
+                          },
+                          {
+                            "$ref": "#/components/schemas/VideoWithCaption"
+                          },
+                          {
+                            "$ref": "#/components/schemas/File"
                           },
                           {
                             "$ref": "#/components/schemas/Embed"
@@ -1922,7 +1931,16 @@
                             "$ref": "#/components/schemas/Image"
                           },
                           {
+                            "$ref": "#/components/schemas/ImageWithCaption"
+                          },
+                          {
                             "$ref": "#/components/schemas/Video"
+                          },
+                          {
+                            "$ref": "#/components/schemas/VideoWithCaption"
+                          },
+                          {
+                            "$ref": "#/components/schemas/File"
                           },
                           {
                             "$ref": "#/components/schemas/Embed"
@@ -3439,6 +3457,38 @@
           "type"
         ]
       },
+      "ImageWithCaption": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "outgoingEdgeId": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "image-with-caption"
+            ],
+            "type": "string"
+          },
+          "content": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "caption": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ]
+      },
       "Video": {
         "type": "object",
         "properties": {
@@ -3497,6 +3547,111 @@
               },
               "isAutoplayEnabled": {
                 "type": "boolean"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ]
+      },
+      "VideoWithCaption": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "outgoingEdgeId": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "video-with-caption"
+            ],
+            "type": "string"
+          },
+          "content": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "url",
+                  "youtube",
+                  "vimeo",
+                  "tiktok",
+                  "gumlet"
+                ],
+                "type": "string"
+              },
+              "height": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "aspectRatio": {
+                "type": "string"
+              },
+              "maxWidth": {
+                "type": "string"
+              },
+              "queryParamsStr": {
+                "type": "string"
+              },
+              "areControlsDisplayed": {
+                "type": "boolean"
+              },
+              "isAutoplayEnabled": {
+                "type": "boolean"
+              },
+              "caption": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ]
+      },
+      "File": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "outgoingEdgeId": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "file"
+            ],
+            "type": "string"
+          },
+          "content": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "filename": {
+                "type": "string"
+              },
+              "caption": {
+                "type": "string"
               }
             }
           }
@@ -12618,7 +12773,16 @@
                             "$ref": "#/components/schemas/Image"
                           },
                           {
+                            "$ref": "#/components/schemas/ImageWithCaption"
+                          },
+                          {
                             "$ref": "#/components/schemas/Video"
+                          },
+                          {
+                            "$ref": "#/components/schemas/VideoWithCaption"
+                          },
+                          {
+                            "$ref": "#/components/schemas/File"
                           },
                           {
                             "$ref": "#/components/schemas/Embed"
@@ -14885,7 +15049,16 @@
                             "$ref": "#/components/schemas/Image"
                           },
                           {
+                            "$ref": "#/components/schemas/ImageWithCaption"
+                          },
+                          {
                             "$ref": "#/components/schemas/Video"
+                          },
+                          {
+                            "$ref": "#/components/schemas/VideoWithCaption"
+                          },
+                          {
+                            "$ref": "#/components/schemas/File"
                           },
                           {
                             "$ref": "#/components/schemas/Embed"
@@ -17152,7 +17325,16 @@
                             "$ref": "#/components/schemas/Image"
                           },
                           {
+                            "$ref": "#/components/schemas/ImageWithCaption"
+                          },
+                          {
                             "$ref": "#/components/schemas/Video"
+                          },
+                          {
+                            "$ref": "#/components/schemas/VideoWithCaption"
+                          },
+                          {
+                            "$ref": "#/components/schemas/File"
                           },
                           {
                             "$ref": "#/components/schemas/Embed"
@@ -19438,7 +19620,16 @@
                             "$ref": "#/components/schemas/Image"
                           },
                           {
+                            "$ref": "#/components/schemas/ImageWithCaption"
+                          },
+                          {
                             "$ref": "#/components/schemas/Video"
+                          },
+                          {
+                            "$ref": "#/components/schemas/VideoWithCaption"
+                          },
+                          {
+                            "$ref": "#/components/schemas/File"
                           },
                           {
                             "$ref": "#/components/schemas/Embed"
@@ -21573,7 +21764,16 @@
                             "$ref": "#/components/schemas/Image"
                           },
                           {
+                            "$ref": "#/components/schemas/ImageWithCaption"
+                          },
+                          {
                             "$ref": "#/components/schemas/Video"
+                          },
+                          {
+                            "$ref": "#/components/schemas/VideoWithCaption"
+                          },
+                          {
+                            "$ref": "#/components/schemas/File"
                           },
                           {
                             "$ref": "#/components/schemas/Embed"
@@ -23135,6 +23335,9 @@
                                                 "$ref": "#/components/schemas/Image"
                                               },
                                               {
+                                                "$ref": "#/components/schemas/ImageWithCaption"
+                                              },
+                                              {
                                                 "type": "object",
                                                 "properties": {
                                                   "id": {
@@ -23168,6 +23371,45 @@
                                                   "id",
                                                   "type"
                                                 ]
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "id": {
+                                                    "type": "string"
+                                                  },
+                                                  "outgoingEdgeId": {
+                                                    "type": "string"
+                                                  },
+                                                  "type": {
+                                                    "enum": [
+                                                      "video-with-caption"
+                                                    ],
+                                                    "type": "string"
+                                                  },
+                                                  "content": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                      "url": {},
+                                                      "id": {},
+                                                      "type": {},
+                                                      "height": {},
+                                                      "aspectRatio": {},
+                                                      "maxWidth": {},
+                                                      "queryParamsStr": {},
+                                                      "areControlsDisplayed": {},
+                                                      "isAutoplayEnabled": {},
+                                                      "caption": {}
+                                                    }
+                                                  }
+                                                },
+                                                "required": [
+                                                  "id",
+                                                  "type"
+                                                ]
+                                              },
+                                              {
+                                                "$ref": "#/components/schemas/File"
                                               },
                                               {
                                                 "type": "object",
@@ -23923,6 +24165,9 @@
                                                 "$ref": "#/components/schemas/Image"
                                               },
                                               {
+                                                "$ref": "#/components/schemas/ImageWithCaption"
+                                              },
+                                              {
                                                 "type": "object",
                                                 "properties": {
                                                   "id": {
@@ -23956,6 +24201,45 @@
                                                   "id",
                                                   "type"
                                                 ]
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "id": {
+                                                    "type": "string"
+                                                  },
+                                                  "outgoingEdgeId": {
+                                                    "type": "string"
+                                                  },
+                                                  "type": {
+                                                    "enum": [
+                                                      "video-with-caption"
+                                                    ],
+                                                    "type": "string"
+                                                  },
+                                                  "content": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                      "url": {},
+                                                      "id": {},
+                                                      "type": {},
+                                                      "height": {},
+                                                      "aspectRatio": {},
+                                                      "maxWidth": {},
+                                                      "queryParamsStr": {},
+                                                      "areControlsDisplayed": {},
+                                                      "isAutoplayEnabled": {},
+                                                      "caption": {}
+                                                    }
+                                                  }
+                                                },
+                                                "required": [
+                                                  "id",
+                                                  "type"
+                                                ]
+                                              },
+                                              {
+                                                "$ref": "#/components/schemas/File"
                                               },
                                               {
                                                 "type": "object",
@@ -29159,7 +29443,16 @@
                                         "$ref": "#/components/schemas/Image"
                                       },
                                       {
+                                        "$ref": "#/components/schemas/ImageWithCaption"
+                                      },
+                                      {
                                         "$ref": "#/components/schemas/Video"
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/VideoWithCaption"
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/File"
                                       },
                                       {
                                         "$ref": "#/components/schemas/Embed"
@@ -30911,6 +31204,9 @@
                                           "$ref": "#/components/schemas/Image"
                                         },
                                         {
+                                          "$ref": "#/components/schemas/ImageWithCaption"
+                                        },
+                                        {
                                           "type": "object",
                                           "properties": {
                                             "id": {
@@ -30967,6 +31263,70 @@
                                             "id",
                                             "type"
                                           ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "id": {
+                                              "type": "string"
+                                            },
+                                            "outgoingEdgeId": {
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "enum": [
+                                                "video-with-caption"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "content": {
+                                              "type": "object",
+                                              "properties": {
+                                                "url": {
+                                                  "type": "string"
+                                                },
+                                                "id": {
+                                                  "type": "string"
+                                                },
+                                                "type": {
+                                                  "enum": [
+                                                    "url",
+                                                    "youtube",
+                                                    "vimeo",
+                                                    "tiktok",
+                                                    "gumlet"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "height": {},
+                                                "aspectRatio": {
+                                                  "type": "string"
+                                                },
+                                                "maxWidth": {
+                                                  "type": "string"
+                                                },
+                                                "queryParamsStr": {
+                                                  "type": "string"
+                                                },
+                                                "areControlsDisplayed": {
+                                                  "type": "boolean"
+                                                },
+                                                "isAutoplayEnabled": {
+                                                  "type": "boolean"
+                                                },
+                                                "caption": {
+                                                  "type": "string"
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "type"
+                                          ]
+                                        },
+                                        {
+                                          "$ref": "#/components/schemas/File"
                                         },
                                         {
                                           "type": "object",
@@ -34606,6 +34966,9 @@
                                               "$ref": "#/components/schemas/Image"
                                             },
                                             {
+                                              "$ref": "#/components/schemas/ImageWithCaption"
+                                            },
+                                            {
                                               "type": "object",
                                               "properties": {
                                                 "id": {
@@ -34662,6 +35025,70 @@
                                                 "id",
                                                 "type"
                                               ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "id": {
+                                                  "type": "string"
+                                                },
+                                                "outgoingEdgeId": {
+                                                  "type": "string"
+                                                },
+                                                "type": {
+                                                  "enum": [
+                                                    "video-with-caption"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "content": {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "url": {
+                                                      "type": "string"
+                                                    },
+                                                    "id": {
+                                                      "type": "string"
+                                                    },
+                                                    "type": {
+                                                      "enum": [
+                                                        "url",
+                                                        "youtube",
+                                                        "vimeo",
+                                                        "tiktok",
+                                                        "gumlet"
+                                                      ],
+                                                      "type": "string"
+                                                    },
+                                                    "height": {},
+                                                    "aspectRatio": {
+                                                      "type": "string"
+                                                    },
+                                                    "maxWidth": {
+                                                      "type": "string"
+                                                    },
+                                                    "queryParamsStr": {
+                                                      "type": "string"
+                                                    },
+                                                    "areControlsDisplayed": {
+                                                      "type": "boolean"
+                                                    },
+                                                    "isAutoplayEnabled": {
+                                                      "type": "boolean"
+                                                    },
+                                                    "caption": {
+                                                      "type": "string"
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "required": [
+                                                "id",
+                                                "type"
+                                              ]
+                                            },
+                                            {
+                                              "$ref": "#/components/schemas/File"
                                             },
                                             {
                                               "type": "object",
@@ -36644,6 +37071,9 @@
                                               "$ref": "#/components/schemas/Image"
                                             },
                                             {
+                                              "$ref": "#/components/schemas/ImageWithCaption"
+                                            },
+                                            {
                                               "type": "object",
                                               "properties": {
                                                 "id": {
@@ -36700,6 +37130,70 @@
                                                 "id",
                                                 "type"
                                               ]
+                                            },
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "id": {
+                                                  "type": "string"
+                                                },
+                                                "outgoingEdgeId": {
+                                                  "type": "string"
+                                                },
+                                                "type": {
+                                                  "enum": [
+                                                    "video-with-caption"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "content": {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "url": {
+                                                      "type": "string"
+                                                    },
+                                                    "id": {
+                                                      "type": "string"
+                                                    },
+                                                    "type": {
+                                                      "enum": [
+                                                        "url",
+                                                        "youtube",
+                                                        "vimeo",
+                                                        "tiktok",
+                                                        "gumlet"
+                                                      ],
+                                                      "type": "string"
+                                                    },
+                                                    "height": {},
+                                                    "aspectRatio": {
+                                                      "type": "string"
+                                                    },
+                                                    "maxWidth": {
+                                                      "type": "string"
+                                                    },
+                                                    "queryParamsStr": {
+                                                      "type": "string"
+                                                    },
+                                                    "areControlsDisplayed": {
+                                                      "type": "boolean"
+                                                    },
+                                                    "isAutoplayEnabled": {
+                                                      "type": "boolean"
+                                                    },
+                                                    "caption": {
+                                                      "type": "string"
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "required": [
+                                                "id",
+                                                "type"
+                                              ]
+                                            },
+                                            {
+                                              "$ref": "#/components/schemas/File"
                                             },
                                             {
                                               "type": "object",
@@ -39016,7 +39510,16 @@
                                             "$ref": "#/components/schemas/Image"
                                           },
                                           {
+                                            "$ref": "#/components/schemas/ImageWithCaption"
+                                          },
+                                          {
                                             "$ref": "#/components/schemas/Video"
+                                          },
+                                          {
+                                            "$ref": "#/components/schemas/VideoWithCaption"
+                                          },
+                                          {
+                                            "$ref": "#/components/schemas/File"
                                           },
                                           {
                                             "$ref": "#/components/schemas/Embed"
@@ -40482,7 +40985,16 @@
                                             "$ref": "#/components/schemas/Image"
                                           },
                                           {
+                                            "$ref": "#/components/schemas/ImageWithCaption"
+                                          },
+                                          {
                                             "$ref": "#/components/schemas/Video"
+                                          },
+                                          {
+                                            "$ref": "#/components/schemas/VideoWithCaption"
+                                          },
+                                          {
+                                            "$ref": "#/components/schemas/File"
                                           },
                                           {
                                             "$ref": "#/components/schemas/Embed"
@@ -42376,6 +42888,9 @@
                                           "$ref": "#/components/schemas/Image"
                                         },
                                         {
+                                          "$ref": "#/components/schemas/ImageWithCaption"
+                                        },
+                                        {
                                           "type": "object",
                                           "properties": {
                                             "id": {
@@ -42432,6 +42947,70 @@
                                             "id",
                                             "type"
                                           ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "id": {
+                                              "type": "string"
+                                            },
+                                            "outgoingEdgeId": {
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "enum": [
+                                                "video-with-caption"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "content": {
+                                              "type": "object",
+                                              "properties": {
+                                                "url": {
+                                                  "type": "string"
+                                                },
+                                                "id": {
+                                                  "type": "string"
+                                                },
+                                                "type": {
+                                                  "enum": [
+                                                    "url",
+                                                    "youtube",
+                                                    "vimeo",
+                                                    "tiktok",
+                                                    "gumlet"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "height": {},
+                                                "aspectRatio": {
+                                                  "type": "string"
+                                                },
+                                                "maxWidth": {
+                                                  "type": "string"
+                                                },
+                                                "queryParamsStr": {
+                                                  "type": "string"
+                                                },
+                                                "areControlsDisplayed": {
+                                                  "type": "boolean"
+                                                },
+                                                "isAutoplayEnabled": {
+                                                  "type": "boolean"
+                                                },
+                                                "caption": {
+                                                  "type": "string"
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "type"
+                                          ]
+                                        },
+                                        {
+                                          "$ref": "#/components/schemas/File"
                                         },
                                         {
                                           "type": "object",
@@ -46591,6 +47170,9 @@
                                                   "$ref": "#/components/schemas/Image"
                                                 },
                                                 {
+                                                  "$ref": "#/components/schemas/ImageWithCaption"
+                                                },
+                                                {
                                                   "type": "object",
                                                   "properties": {
                                                     "id": {
@@ -46647,6 +47229,70 @@
                                                     "id",
                                                     "type"
                                                   ]
+                                                },
+                                                {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "id": {
+                                                      "type": "string"
+                                                    },
+                                                    "outgoingEdgeId": {
+                                                      "type": "string"
+                                                    },
+                                                    "type": {
+                                                      "enum": [
+                                                        "video-with-caption"
+                                                      ],
+                                                      "type": "string"
+                                                    },
+                                                    "content": {
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "url": {
+                                                          "type": "string"
+                                                        },
+                                                        "id": {
+                                                          "type": "string"
+                                                        },
+                                                        "type": {
+                                                          "enum": [
+                                                            "url",
+                                                            "youtube",
+                                                            "vimeo",
+                                                            "tiktok",
+                                                            "gumlet"
+                                                          ],
+                                                          "type": "string"
+                                                        },
+                                                        "height": {},
+                                                        "aspectRatio": {
+                                                          "type": "string"
+                                                        },
+                                                        "maxWidth": {
+                                                          "type": "string"
+                                                        },
+                                                        "queryParamsStr": {
+                                                          "type": "string"
+                                                        },
+                                                        "areControlsDisplayed": {
+                                                          "type": "boolean"
+                                                        },
+                                                        "isAutoplayEnabled": {
+                                                          "type": "boolean"
+                                                        },
+                                                        "caption": {
+                                                          "type": "string"
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "id",
+                                                    "type"
+                                                  ]
+                                                },
+                                                {
+                                                  "$ref": "#/components/schemas/File"
                                                 },
                                                 {
                                                   "type": "object",
@@ -48679,6 +49325,9 @@
                                                   "$ref": "#/components/schemas/Image"
                                                 },
                                                 {
+                                                  "$ref": "#/components/schemas/ImageWithCaption"
+                                                },
+                                                {
                                                   "type": "object",
                                                   "properties": {
                                                     "id": {
@@ -48735,6 +49384,70 @@
                                                     "id",
                                                     "type"
                                                   ]
+                                                },
+                                                {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "id": {
+                                                      "type": "string"
+                                                    },
+                                                    "outgoingEdgeId": {
+                                                      "type": "string"
+                                                    },
+                                                    "type": {
+                                                      "enum": [
+                                                        "video-with-caption"
+                                                      ],
+                                                      "type": "string"
+                                                    },
+                                                    "content": {
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "url": {
+                                                          "type": "string"
+                                                        },
+                                                        "id": {
+                                                          "type": "string"
+                                                        },
+                                                        "type": {
+                                                          "enum": [
+                                                            "url",
+                                                            "youtube",
+                                                            "vimeo",
+                                                            "tiktok",
+                                                            "gumlet"
+                                                          ],
+                                                          "type": "string"
+                                                        },
+                                                        "height": {},
+                                                        "aspectRatio": {
+                                                          "type": "string"
+                                                        },
+                                                        "maxWidth": {
+                                                          "type": "string"
+                                                        },
+                                                        "queryParamsStr": {
+                                                          "type": "string"
+                                                        },
+                                                        "areControlsDisplayed": {
+                                                          "type": "boolean"
+                                                        },
+                                                        "isAutoplayEnabled": {
+                                                          "type": "boolean"
+                                                        },
+                                                        "caption": {
+                                                          "type": "string"
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "id",
+                                                    "type"
+                                                  ]
+                                                },
+                                                {
+                                                  "$ref": "#/components/schemas/File"
                                                 },
                                                 {
                                                   "type": "object",
@@ -51081,7 +51794,16 @@
                                             "$ref": "#/components/schemas/Image"
                                           },
                                           {
+                                            "$ref": "#/components/schemas/ImageWithCaption"
+                                          },
+                                          {
                                             "$ref": "#/components/schemas/Video"
+                                          },
+                                          {
+                                            "$ref": "#/components/schemas/VideoWithCaption"
+                                          },
+                                          {
+                                            "$ref": "#/components/schemas/File"
                                           },
                                           {
                                             "$ref": "#/components/schemas/Embed"
@@ -52326,7 +53048,16 @@
                                             "$ref": "#/components/schemas/Image"
                                           },
                                           {
+                                            "$ref": "#/components/schemas/ImageWithCaption"
+                                          },
+                                          {
                                             "$ref": "#/components/schemas/Video"
+                                          },
+                                          {
+                                            "$ref": "#/components/schemas/VideoWithCaption"
+                                          },
+                                          {
+                                            "$ref": "#/components/schemas/File"
                                           },
                                           {
                                             "$ref": "#/components/schemas/Embed"
@@ -54209,6 +54940,9 @@
                                           "$ref": "#/components/schemas/Image"
                                         },
                                         {
+                                          "$ref": "#/components/schemas/ImageWithCaption"
+                                        },
+                                        {
                                           "type": "object",
                                           "properties": {
                                             "id": {
@@ -54265,6 +54999,70 @@
                                             "id",
                                             "type"
                                           ]
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "id": {
+                                              "type": "string"
+                                            },
+                                            "outgoingEdgeId": {
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "enum": [
+                                                "video-with-caption"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "content": {
+                                              "type": "object",
+                                              "properties": {
+                                                "url": {
+                                                  "type": "string"
+                                                },
+                                                "id": {
+                                                  "type": "string"
+                                                },
+                                                "type": {
+                                                  "enum": [
+                                                    "url",
+                                                    "youtube",
+                                                    "vimeo",
+                                                    "tiktok",
+                                                    "gumlet"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "height": {},
+                                                "aspectRatio": {
+                                                  "type": "string"
+                                                },
+                                                "maxWidth": {
+                                                  "type": "string"
+                                                },
+                                                "queryParamsStr": {
+                                                  "type": "string"
+                                                },
+                                                "areControlsDisplayed": {
+                                                  "type": "boolean"
+                                                },
+                                                "isAutoplayEnabled": {
+                                                  "type": "boolean"
+                                                },
+                                                "caption": {
+                                                  "type": "string"
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "type"
+                                          ]
+                                        },
+                                        {
+                                          "$ref": "#/components/schemas/File"
                                         },
                                         {
                                           "type": "object",
@@ -60081,7 +60879,8 @@
                               "text",
                               "image",
                               "video",
-                              "audio"
+                              "audio",
+                              "file"
                             ],
                             "type": "string"
                           },
@@ -60095,6 +60894,9 @@
                             "type": "string"
                           },
                           "audio": {
+                            "type": "string"
+                          },
+                          "file": {
                             "type": "string"
                           }
                         },
@@ -74943,6 +75745,32 @@
                                 "properties": {
                                   "type": {
                                     "enum": [
+                                      "image-with-caption"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "properties": {
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "caption": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "enum": [
                                       "video"
                                     ],
                                     "type": "string"
@@ -74981,6 +75809,90 @@
                                       },
                                       "isAutoplayEnabled": {
                                         "type": "boolean"
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "enum": [
+                                      "video-with-caption"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "properties": {
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "enum": [
+                                          "url",
+                                          "youtube",
+                                          "vimeo",
+                                          "tiktok",
+                                          "gumlet"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      "height": {},
+                                      "aspectRatio": {
+                                        "type": "string"
+                                      },
+                                      "maxWidth": {
+                                        "type": "string"
+                                      },
+                                      "queryParamsStr": {
+                                        "type": "string"
+                                      },
+                                      "areControlsDisplayed": {
+                                        "type": "boolean"
+                                      },
+                                      "isAutoplayEnabled": {
+                                        "type": "boolean"
+                                      },
+                                      "caption": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "enum": [
+                                      "file"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "properties": {
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "filename": {
+                                        "type": "string"
+                                      },
+                                      "caption": {
+                                        "type": "string"
                                       }
                                     }
                                   }
@@ -77616,6 +78528,32 @@
                                 "properties": {
                                   "type": {
                                     "enum": [
+                                      "image-with-caption"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "properties": {
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "caption": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "enum": [
                                       "video"
                                     ],
                                     "type": "string"
@@ -77654,6 +78592,90 @@
                                       },
                                       "isAutoplayEnabled": {
                                         "type": "boolean"
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "enum": [
+                                      "video-with-caption"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "properties": {
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "enum": [
+                                          "url",
+                                          "youtube",
+                                          "vimeo",
+                                          "tiktok",
+                                          "gumlet"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      "height": {},
+                                      "aspectRatio": {
+                                        "type": "string"
+                                      },
+                                      "maxWidth": {
+                                        "type": "string"
+                                      },
+                                      "queryParamsStr": {
+                                        "type": "string"
+                                      },
+                                      "areControlsDisplayed": {
+                                        "type": "boolean"
+                                      },
+                                      "isAutoplayEnabled": {
+                                        "type": "boolean"
+                                      },
+                                      "caption": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "enum": [
+                                      "file"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "properties": {
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "filename": {
+                                        "type": "string"
+                                      },
+                                      "caption": {
+                                        "type": "string"
                                       }
                                     }
                                   }
@@ -80286,6 +81308,32 @@
                                 "properties": {
                                   "type": {
                                     "enum": [
+                                      "image-with-caption"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "properties": {
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "caption": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "enum": [
                                       "video"
                                     ],
                                     "type": "string"
@@ -80324,6 +81372,90 @@
                                       },
                                       "isAutoplayEnabled": {
                                         "type": "boolean"
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "enum": [
+                                      "video-with-caption"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "properties": {
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "enum": [
+                                          "url",
+                                          "youtube",
+                                          "vimeo",
+                                          "tiktok",
+                                          "gumlet"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      "height": {},
+                                      "aspectRatio": {
+                                        "type": "string"
+                                      },
+                                      "maxWidth": {
+                                        "type": "string"
+                                      },
+                                      "queryParamsStr": {
+                                        "type": "string"
+                                      },
+                                      "areControlsDisplayed": {
+                                        "type": "boolean"
+                                      },
+                                      "isAutoplayEnabled": {
+                                        "type": "boolean"
+                                      },
+                                      "caption": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "enum": [
+                                      "file"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "content": {
+                                    "type": "object",
+                                    "properties": {
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "filename": {
+                                        "type": "string"
+                                      },
+                                      "caption": {
+                                        "type": "string"
                                       }
                                     }
                                   }

@@ -219,3 +219,35 @@ describe("convertRichTextToMarkdown", () => {
     );
   });
 });
+
+describe("convertRichTextToMarkdown with bold standalone variable paragraphs", () => {
+  it("should preserve paragraph breaks around a bold standalone variable", () => {
+    const richText: TElement[] = [
+      {
+        type: "p",
+        children: [{ bold: true, text: "EMAIL:" }],
+      },
+      {
+        type: "p",
+        children: [{ bold: true, text: "{{VAR_MAIL}}" }],
+      },
+      {
+        type: "p",
+        children: [{ text: "" }],
+      },
+      {
+        type: "p",
+        children: [{ text: "Next paragraph" }],
+      },
+    ];
+    const parsedRichText = parseVariablesInRichText(richText, {
+      variables: [{ id: "1", name: "VAR_MAIL", value: "teste@teste.com" }],
+      sessionStore: new SessionStore(),
+      takeLatestIfList: false,
+    });
+    const markdown = convertRichTextToMarkdown(parsedRichText.parsedElements, {
+      flavour: "whatsapp",
+    });
+    expect(markdown).toBe("*EMAIL:*\n*teste@teste.com*\n\nNext paragraph");
+  });
+});

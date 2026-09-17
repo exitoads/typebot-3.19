@@ -64,6 +64,35 @@ export const convertMessageToWhatsAppMessage = async ({
         },
       };
     }
+    case BubbleBlockType.IMAGE_WITH_CAPTION: {
+      if (!message.content.url || isImageUrlNotCompatible(message.content.url))
+        return null;
+
+      if (mediaCache) {
+        const mediaId = await getOrUploadMedia({
+          url: message.content.url,
+          cache: mediaCache,
+        });
+
+        if (mediaId) {
+          return {
+            type: "image",
+            image: {
+              id: mediaId,
+              caption: message.content.caption,
+            },
+          };
+        }
+      }
+
+      return {
+        type: "image",
+        image: {
+          link: message.content.url,
+          caption: message.content.caption,
+        },
+      };
+    }
     case BubbleBlockType.AUDIO:
       if (!message.content.url) return null;
 
@@ -130,6 +159,79 @@ export const convertMessageToWhatsAppMessage = async ({
           },
         };
       return null;
+    case BubbleBlockType.VIDEO_WITH_CAPTION:
+      if (!message.content.url) return null;
+      if (message.content.type === VideoBubbleContentType.URL) {
+        if (mediaCache) {
+          const mediaId = await getOrUploadMedia({
+            url: message.content.url,
+            cache: mediaCache,
+          });
+
+          if (mediaId) {
+            return {
+              type: "video",
+              video: {
+                id: mediaId,
+                caption: message.content.caption,
+              },
+            };
+          }
+        }
+
+        return {
+          type: "video",
+          video: {
+            link: message.content.url,
+            caption: message.content.caption,
+          },
+        };
+      }
+      if (
+        embeddableVideoTypes.includes(
+          message.content.type as EmbeddableVideoBubbleContentType,
+        )
+      )
+        return {
+          type: "text",
+          text: {
+            body: `${embedBaseUrls[message.content.type as EmbeddableVideoBubbleContentType]}/${message.content.id}`,
+            preview_url: true,
+          },
+        };
+      return null;
+    case BubbleBlockType.FILE: {
+      if (!message.content.url) return null;
+      const filename =
+        message.content.filename ?? message.content.url.split("/").pop();
+
+      if (mediaCache) {
+        const mediaId = await getOrUploadMedia({
+          url: message.content.url,
+          cache: mediaCache,
+        });
+
+        if (mediaId) {
+          return {
+            type: "document",
+            document: {
+              id: mediaId,
+              filename,
+              caption: message.content.caption,
+            },
+          };
+        }
+      }
+
+      return {
+        type: "document",
+        document: {
+          link: message.content.url,
+          filename,
+          caption: message.content.caption,
+        },
+      };
+    }
     case BubbleBlockType.EMBED: {
       if (!message.content.url) return null;
       const fileExtension = message.content.url.split(".").pop();

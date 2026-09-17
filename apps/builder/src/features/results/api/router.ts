@@ -81,11 +81,12 @@ export const resultsRouter = {
         transcript: z.array(
           z.object({
             role: z.enum(["bot", "user"]),
-            type: z.enum(["text", "image", "video", "audio"]),
+            type: z.enum(["text", "image", "video", "audio", "file"]),
             text: z.string().optional(),
             image: z.string().optional(),
             video: z.string().optional(),
             audio: z.string().optional(),
+            file: z.string().optional(),
           }),
         ),
       }),

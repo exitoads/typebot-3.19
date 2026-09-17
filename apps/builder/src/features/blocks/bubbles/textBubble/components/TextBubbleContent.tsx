@@ -11,7 +11,7 @@ export const TextBubbleContent = ({ block }: Props) => {
   return (
     <div
       className={cx(
-        "flex w-[90%] flex-col slate-html-container",
+        "flex w-[90%] min-w-0 flex-col slate-html-container break-words",
         isEmpty ? "opacity-50 text-gray-9" : "opacity-100",
       )}
     >

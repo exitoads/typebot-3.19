@@ -10,9 +10,12 @@ import { cn } from "@typebot.io/ui/lib/cn";
 import type { JSX } from "react";
 import { AudioBubbleIcon } from "@/features/blocks/bubbles/audio/components/AudioBubbleIcon";
 import { EmbedBubbleIcon } from "@/features/blocks/bubbles/embed/components/EmbedBubbleIcon";
+import { FileBubbleIcon } from "@/features/blocks/bubbles/file/components/FileBubbleIcon";
 import { ImageBubbleIcon } from "@/features/blocks/bubbles/image/components/ImageBubbleIcon";
+import { ImageWithCaptionBubbleIcon } from "@/features/blocks/bubbles/imageWithCaption/components/ImageWithCaptionBubbleIcon";
 import { TextBubbleIcon } from "@/features/blocks/bubbles/textBubble/components/TextBubbleIcon";
 import { VideoBubbleIcon } from "@/features/blocks/bubbles/video/components/VideoBubbleIcon";
+import { VideoWithCaptionBubbleIcon } from "@/features/blocks/bubbles/videoWithCaption/components/VideoWithCaptionBubbleIcon";
 import { ButtonsInputIcon } from "@/features/blocks/inputs/buttons/components/ButtonsIcon";
 import { DateInputIcon } from "@/features/blocks/inputs/date/components/DateInputIcon";
 import { EmailInputIcon } from "@/features/blocks/inputs/emailInput/components/EmailInputIcon";
@@ -61,9 +64,25 @@ export const BlockIcon = ({ type, className }: BlockIconProps): JSX.Element => {
       return (
         <ImageBubbleIcon className={cn("text-gray-12 stroke-2", className)} />
       );
+    case BubbleBlockType.IMAGE_WITH_CAPTION:
+      return (
+        <ImageWithCaptionBubbleIcon
+          className={cn("text-gray-12 stroke-2", className)}
+        />
+      );
     case BubbleBlockType.VIDEO:
       return (
         <VideoBubbleIcon className={cn("text-gray-12 stroke-2", className)} />
+      );
+    case BubbleBlockType.VIDEO_WITH_CAPTION:
+      return (
+        <VideoWithCaptionBubbleIcon
+          className={cn("text-gray-12 stroke-2", className)}
+        />
+      );
+    case BubbleBlockType.FILE:
+      return (
+        <FileBubbleIcon className={cn("text-gray-12 stroke-2", className)} />
       );
     case BubbleBlockType.EMBED:
       return (

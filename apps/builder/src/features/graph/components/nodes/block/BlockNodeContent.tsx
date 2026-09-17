@@ -9,9 +9,12 @@ import { LogicBlockType } from "@typebot.io/blocks-logic/constants";
 import type { JSX } from "react";
 import { AudioBubbleNode } from "@/features/blocks/bubbles/audio/components/AudioBubbleNode";
 import { EmbedBubbleContent } from "@/features/blocks/bubbles/embed/components/EmbedBubbleContent";
+import { FileBubbleContent } from "@/features/blocks/bubbles/file/components/FileBubbleContent";
 import { ImageBubbleContent } from "@/features/blocks/bubbles/image/components/ImageBubbleContent";
+import { ImageWithCaptionBubbleContent } from "@/features/blocks/bubbles/imageWithCaption/components/ImageWithCaptionBubbleContent";
 import { TextBubbleContent } from "@/features/blocks/bubbles/textBubble/components/TextBubbleContent";
 import { VideoBubbleContent } from "@/features/blocks/bubbles/video/components/VideoBubbleContent";
+import { VideoWithCaptionBubbleContent } from "@/features/blocks/bubbles/videoWithCaption/components/VideoWithCaptionBubbleContent";
 import { ButtonsBlockNode } from "@/features/blocks/inputs/buttons/components/ButtonsBlockNode";
 import { CardsBlockNode } from "@/features/blocks/inputs/cards/components/CardsBlockNode";
 import { DateNodeContent } from "@/features/blocks/inputs/date/components/DateNodeContent";
@@ -64,8 +67,17 @@ export const BlockNodeContent = ({
     case BubbleBlockType.IMAGE: {
       return <ImageBubbleContent block={block} />;
     }
+    case BubbleBlockType.IMAGE_WITH_CAPTION: {
+      return <ImageWithCaptionBubbleContent block={block} />;
+    }
     case BubbleBlockType.VIDEO: {
       return <VideoBubbleContent block={block} />;
+    }
+    case BubbleBlockType.VIDEO_WITH_CAPTION: {
+      return <VideoWithCaptionBubbleContent block={block} />;
+    }
+    case BubbleBlockType.FILE: {
+      return <FileBubbleContent block={block} />;
     }
     case BubbleBlockType.EMBED: {
       return <EmbedBubbleContent block={block} />;
