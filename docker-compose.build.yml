@@ -13,10 +13,9 @@ services:
       timeout: 5s
       retries: 5
   typebot-builder:
+    image: typebot-app:local
     build:
       context: .
-      args:
-        - SCOPE=builder
     depends_on:
       typebot-db-docker:
         condition: service_healthy
@@ -26,11 +25,11 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     env_file: .env.docker
+    entrypoint: ["./builder-entrypoint.sh"]
   typebot-viewer:
+    image: typebot-app:local
     build:
       context: .
-      args:
-        - SCOPE=viewer
     depends_on:
       typebot-db-docker:
         condition: service_healthy
@@ -38,3 +37,4 @@ services:
     ports:
       - "8081:3000"
     env_file: .env.docker
+    entrypoint: ["./viewer-entrypoint.sh"]
